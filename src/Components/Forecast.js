@@ -19,7 +19,7 @@ function Forecast(props) {
       )
       .then((response) => {
         setWeather(response.data);
-        setQuery("");
+        setQuery(null);
         setSuggestions([]);
         setWeatherName({
           main: response.data.weather[0].main,
@@ -30,7 +30,7 @@ function Forecast(props) {
       .catch(function (error) {
         console.log(error);
         setWeather("");
-        setQuery("");
+        setQuery(null);
         setError({ message: "Not Found", query: query });
       });
   };
@@ -103,7 +103,7 @@ function Forecast(props) {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          if (query.length === 0) {
+          if (query?.length === 0) {
             // Fetch weather data for current location
             const getPosition = () => {
               return new Promise((resolve, reject) => {
@@ -136,6 +136,11 @@ function Forecast(props) {
     
       fetchData();
     }, [query]);
+
+    const handleInputFocus = () => {
+      // Reset error message when input field is focused
+      setError("");
+    };
       
 
   return (
@@ -158,6 +163,7 @@ function Forecast(props) {
             className="search-bar"
             placeholder="Search any city"
             onChange={handleInputChange}
+            onFocus={handleInputFocus} 
             value={query}
           />
           <div className="img-box">
